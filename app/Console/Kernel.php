@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->job(new SendReminders($this->getMembers()))->everyMinute();
-        $schedule->job(new MonthlyContributionJob($this->getMembers()))->monthlyOn(25, '10:00');
+        //$schedule->job(new MonthlyContributionJob($this->getMembers()))->monthlyOn(25, '10:00');
         //$schedule->job(new CallReminders($this->fetchAllMembers()))->everyMinute();
     }
 
@@ -47,12 +47,7 @@ class Kernel extends ConsoleKernel
     }
 
     public function getMembers(){
-        $reminder  = new Reminder();
-        return Member::reminders($reminder->nextDue());
+
+        return Member::reminder((new Reminder())->today());
     }
-
-
-    // public function fetchAllMembers(){
-    //     return Member::all();
-    // }
 }

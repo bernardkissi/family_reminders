@@ -18,6 +18,7 @@ class CreateMembersTable extends Migration
             $table->string('name');
             $table->string('mobile');
             $table->string('day_to_call');
+            $table->string('email')->nullable();
             $table->timestamps();
         });
     }

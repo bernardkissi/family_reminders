@@ -20,18 +20,21 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/members', 'MembersController@index')->name('get.members');
 Route::post('/members', 'MembersController@add')->name('add.members');
-Route::patch('/members/{member}', 'MembersController@update')->name('update.members');
-Route::delete('/members/{member}', 'MembersController@delete')->name('delete.members');
+Route::patch('/members/{member}', 'MembersController@update')->name('update.member');
+Route::patch('/members', 'MembersController@updateMultiple')->name('update.members');
+Route::delete('/members', 'MembersController@deleteMultiple')->name('delete.members');
+Route::delete('/members/{member}', 'MembersController@delete')->name('delete.member');
 
 Route::get('/reminders/nextday', 'MembersController@nextToBeReminded')->name('reminded.nextday');
 Route::get('/reminders/today', 'MembersController@remindedToday')->name('reminded.today');
 
-Route::post('/announcements', 'MessageController@send')->name('send.announcements');
+Route::post('/announcement', 'MessageController@sendMessage')->name('send.announcements');
 
 Route::post('/messages', 'MessageController@add')->name('add.message');
 Route::patch('/default/{message}', 'MessageController@setDefault')->name('add.message');
 Route::patch('/messages/{message}', 'MessageController@update')->name('add.message');
 Route::delete('/messages/{message}', 'MessageController@delete')->name('delete.message');
+Route::get('/messages', 'MessageController@index')->name('get.messages');
 
 
 Route::post('/contribution', 'ContributionController@create')->name('create.contribution');

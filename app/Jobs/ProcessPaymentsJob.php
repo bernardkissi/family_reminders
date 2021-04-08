@@ -9,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ProcessPaymentsJob implements ShouldQueue
+class ProcessPaymentsJob
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -31,7 +31,8 @@ class ProcessPaymentsJob implements ShouldQueue
      */
     public function handle()
     {
-        $payment = Payment::where('tx_ref', $this->transaction->tx_ref)->first();
-        $payment->update(['payment_id' => $this->transaction->id, 'status' => 'successful']);
+        $payment = Payment::where('tx_ref', $this->transaction)->first();
+        return $payment;
+        // $payment->update(['payment_id' => $this->transaction['id'], 'status' => $this->transaction['status']]);
     }
 }

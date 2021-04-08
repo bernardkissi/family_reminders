@@ -2,15 +2,15 @@
 
 namespace App\Traits;
 
+trait RetrieveMembers
+{
 
-trait RetrieveMembers{
 
+    public function getNumbers($members)
+    {
 
-	public function getNumbers($members){
-
-		return collect($this->members)->map(function ($member){
-            return $member->mobile;
+        return collect($this->members)->map(function ($member) {
+            return $member;
         })->toArray();
-
-	}
+    }
 }
