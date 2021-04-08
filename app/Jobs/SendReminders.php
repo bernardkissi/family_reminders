@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Member;
+use App\Models\Message;
 use App\Services\Reminders\Reminder;
 use App\Services\SmsGateways\Mnotify;
 use App\Traits\RetrieveMembers;
