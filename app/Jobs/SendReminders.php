@@ -57,7 +57,7 @@ class SendReminders
 
             'recipient' => $this->getNumbers($this->members),
             'sender' => 'kissiFamily',
-            'message' => Message::where('default', true)->first()
+            'message' => Message::where('default', true)->first()['message']
         ];
     }
 }
