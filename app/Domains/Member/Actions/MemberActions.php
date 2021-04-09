@@ -27,7 +27,7 @@ class MemberActions
      *
      * @return Collection Illuminate\Support\Collection;
      */
-    public function tomorrow(string $day):Collection
+    public function tomorrow():Collection
     {
         return Member::reminder((new Reminder())->nextDue());
     }
