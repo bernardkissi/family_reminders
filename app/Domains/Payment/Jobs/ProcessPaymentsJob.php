@@ -9,19 +9,19 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ProcessPaymentsJob
+class ProcessPaymentsJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $transaction;
+    public $transcation;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($transaction)
+    public function __construct(array $transaction)
     {
-        $this->transaction = $transaction;
+        $this->transcation = $transcation;
     }
 
     /**
@@ -31,8 +31,12 @@ class ProcessPaymentsJob
      */
     public function handle()
     {
-        $payment = Payment::where('tx_ref', $this->transaction)->first();
-        return $payment;
-        // $payment->update(['payment_id' => $this->transaction['id'], 'status' => $this->transaction['status']]);
+        $payment = Payment::where('tx_ref', $this->transcation)->first();
+        $payment->update([
+            'payment_id' => $this->transcation->payment_id,
+            'status' => $this->transcation->status,
+            'payment_type' => $this->transcation->payment_type,
+            'amount' => $this->transcation->amount
+        ]);
     }
 }

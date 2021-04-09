@@ -9,7 +9,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class AnnouncementsDispatch implements ShouldQueue
+class AnnounceJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -38,10 +38,11 @@ class AnnouncementsDispatch implements ShouldQueue
 
     /**
      *  Get members whose calling is due
-     * 
+     *
      * @return [type] [description]
      */
-    public function retrieveMembers(){
+    public function retrieveMembers()
+    {
 
         return [
             

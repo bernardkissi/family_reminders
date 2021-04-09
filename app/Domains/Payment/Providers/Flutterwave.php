@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace App\Domains\Payment\Providers;
 
@@ -7,13 +8,22 @@ use Illuminate\Support\Facades\Http;
 
 class Flutterwave
 {
-
-    public function charge($name, $amount, $code)
+    /**
+     *  Process payments to the flutterwave server
+     *
+     * @param  array  $user
+     * @param  string $amount
+     * @param  int    $code
+     * @return array
+     */
+    public function charge(array $user, string $amount, int $code): array
     {
-
-        $payload = $this->payload($name, $amount, $code);
-        $response = Http::withToken(env('FLUTTERWAVE_SEC_KEY'))->post(config('flutterwave.url'), $payload);
-        return $response;
+        
+        $payload = $this->payload($user, $amount, $code);
+        
+        $response = Http::withToken(env('FLUTTERWAVE_SEC_KEY'))
+            ->post(config('flutterwave.url'), $payload);
+        
         if ($response->failed()) {
             return response()->json(['message' => 'Your payment has failed']);
         }
@@ -21,9 +31,17 @@ class Flutterwave
         return $response;
     }
 
-    protected function payload($user, $amount, $code)
-    {
 
+    /**
+     *  Returns payment data object
+     *
+     * @param  array  $user
+     * @param  string $amount
+     * @param  int    $code
+     * @return array
+     */
+    protected function payload(array $user, string $amount, int $code): array
+    {
         return [
 
             'tx_ref' => $code,
@@ -31,7 +49,11 @@ class Flutterwave
             'currency' => 'GHS',
             'payment_options' => 'mobilemoney,ussd,card',
             'redirect_url' => route('home'),
-            'customer' => [ 'name' => $user , 'email' => 'bernardkissi18@gmail.com'],
+            'customer' => [
+                'name' => $user->name ,
+                'email' => $user->email ,
+                'mobile' => $user->mobile
+            ],
             'subaccounts'=> [
                 
                 [
@@ -41,7 +63,7 @@ class Flutterwave
                 ]
             ],
             
-            'customization' => [ 'title' => 'Kissi Family' ]
+            'customization' => [ 'Title' => 'Kissi Family' ]
         ];
     }
 }
