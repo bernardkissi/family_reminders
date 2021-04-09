@@ -27,7 +27,7 @@ class MemberActions
      *
      * @return Collection Illuminate\Support\Collection;
      */
-    public function tomorrow():Collection
+    public function tomorrow(): Collection
     {
         return Member::reminder((new Reminder())->nextDue());
     }
@@ -38,7 +38,7 @@ class MemberActions
      * @return Collection Illuminate\Support\Collection;
      *
      */
-    public function today():Collection
+    public function today(): Collection
     {
         return Member::reminder((new Reminder())->today());
     }
@@ -51,7 +51,7 @@ class MemberActions
      * @param  string $day
      * @return void
      */
-    public function switchDay(array $ids, string $day):void
+    public function switchDay(array $ids, string $day): void
     {
          DB::table('members')
             ->whereIn('id', $ids)
@@ -64,7 +64,7 @@ class MemberActions
      * @param  array $member
      * @return Member  App\Domains\Member\Member;
      */
-    public function create(array $member):Member
+    public function create(array $member): Member
     {
          $model = Member::create([
             'name' => $member->name,
@@ -82,7 +82,7 @@ class MemberActions
      * @param  array $member
      * @return Member  App\Domains\Member\Member;
      */
-    public function update(Member $member):Member
+    public function update(Member $member): Member
     {
          $member->update([
             'name' => $member->name,
@@ -101,7 +101,7 @@ class MemberActions
      * @param  Member $member App\Domains\Member\Member;
      * @return void
      */
-    public function delete(Member $member):void
+    public function delete(Member $member): void
     {
         $member->delete();
     }
@@ -113,7 +113,7 @@ class MemberActions
      * @param  array $ids
      * @return void
      */
-    public function deleteSelected(array $ids):void
+    public function deleteSelected(array $ids): void
     {
          DB::table('members')
             ->whereIn('id', $ids)
