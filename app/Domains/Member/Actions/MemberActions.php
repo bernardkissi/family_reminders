@@ -6,6 +6,7 @@ namespace App\Domains\Member\Actions;
 
 use App\Domains\Member\Member;
 use App\Domains\Reminder\Services\Reminder;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +18,7 @@ class MemberActions
      *
      * @return array
      */
-    public function all():array
+    public function all(): Collection
     {
         return DB::table('members')->select('id', 'name', 'mobile', 'email')->get();
     }
@@ -67,10 +68,10 @@ class MemberActions
     public function create(array $member): Member
     {
          $model = Member::create([
-            'name' => $member->name,
-            'mobile' => $member->mobile,
-            'email' => $member->email,
-            'day_to_call' => $member->day,
+            'name' => $member['name'],
+            'mobile' => $member['mobile'],
+            'email' => $member['email'],
+            'day_to_call' => $member['day_to_call'],
          ]);
 
         return $model;
@@ -79,16 +80,17 @@ class MemberActions
    /**
      *  Updates a member
      *
-     * @param  array $member
+     * @param  Member $member App\Domains\Member\Member;
+     * @param  array data
      * @return Member  App\Domains\Member\Member;
      */
-    public function update(Member $member): Member
+    public function update(Member $member, array $data): Member
     {
          $member->update([
-            'name' => $member->name,
-            'mobile' => $member->mobile,
-            'email' =>  $member->email,
-            'day_to_call' => $member->day,
+            'name' => $data['name'],
+            'mobile' => $data['mobile'],
+            'email' =>  $data['email'],
+            'day_to_call' => $data['day_to_call'],
          ]);
 
         return $member;
