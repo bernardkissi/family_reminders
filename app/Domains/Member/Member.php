@@ -40,20 +40,23 @@ class Member extends Model
             ->get();
     }
 
-
-    public function members()
-    {
-
-        return self::all();
-    }
-
-
+    
+    /**
+     *  Contributions relationship
+     * 
+     * @return hasMany 
+     */
     public function contributions()
     {
         return $this->hasMany(Contribution::class);
     }
 
 
+    /**
+     * Reminders relationship
+     * 
+     * @return hasMany
+     */
     public function reminders()
     {
         return $this->hasMany(Reminder::class);

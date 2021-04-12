@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\Members\MemberController;
+use App\Http\Controllers\API\Message\MessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -27,10 +28,15 @@ Route::delete('/members', [ MemberController::class, 'deleteSelected']);
 
 Route::patch('/members/switchDay', [ MemberController::class, 'switchDay']);
 
-Route::get('/reminders/tomorrow',  [ MemberController::class, 'tomorrow']);
-Route::get('/reminders/today',     [ MemberController::class, 'today']);
+Route::get('/reminders/tomorrow', [ MemberController::class, 'tomorrow']);
+Route::get('/reminders/today', [ MemberController::class, 'today']);
 
-
+Route::get('/messages', [ MessageController::class, 'messages']);
+Route::post('/messages', [ MessageController::class, 'create']);
+Route::patch('/messages/{message}', [ MessageController::class, 'update']);
+Route::patch('/messages/default/{message}', [MessageController::class, 'default']);
+Route::delete('/messages/{message}',  [MessageController::class, 'delete']);
+Route::delete('/messages',  [MessageController::class, 'deleteSelected']);
 
 // Route::post('/members', 'MembersController@add')->name('add.members');
 // Route::patch('/members/{member}', 'MembersController@update')->name('update.member');

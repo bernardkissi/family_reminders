@@ -7,6 +7,8 @@ namespace App\Domains\Message\Actions;
 use App\Domains\Communication\Sms\Providers\Mnotify;
 use App\Domains\Member\Member;
 use App\Domains\Message\Message;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class MessageActions
 {
@@ -15,7 +17,7 @@ class MessageActions
      *
      * @return array
      */
-    public function all():array
+    public function all():Collection
     {
         return DB::table('messages')->select('id', 'message', 'default')->get();
     }
@@ -53,9 +55,9 @@ class MessageActions
      * @param  array   $data
      * @return void
      */
-    public function update(Message $msg, array $data): void
+    public function update(Message $msg, string $message): void
     {
-        $msg->update(['message' => $data->message, 'default' => $data->default]);
+        $msg->update(['message' => $message ]);
     }
 
     /**
@@ -75,11 +77,23 @@ class MessageActions
      * @param  Message $msg App\Domains\Message\Message;
      * @return void
      */
-    public function delete(Message $msg): void
+    public function delete(Message $message): void
     {
         $message->delete();
     }
 
+     /**
+     * Removes a multiple messages
+     *
+     * @param  array $ids
+     * @return void
+     */
+    public function deleteSelected(array $ids): void
+    {
+         DB::table('messages')
+            ->whereIn('id', $ids)
+            ->delete();
+    }
 
     /**
      * Formatting data into message required data
@@ -87,9 +101,17 @@ class MessageActions
      * @param  string $message
      * @return array
      */
-    protected function data(string $message): array
-    {
-        $members = Member::select('mobile')->get();
+    protected function data(string $message, $members=null): array
+    {   
+        if(!$members){
+            $members = DB::table('members')
+            ->whereIn('id', $ids)->get();
+        }
+        
+        if($members){
+             $members = Member::select('mobile')->get();
+        }
+
         $numbers = collect($members)->map(function ($member) {
             return $member->mobile;
         })->toArray();
