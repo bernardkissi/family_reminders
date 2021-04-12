@@ -96,15 +96,13 @@ class MessageController extends Controller
     /**
      * Send messages/announcements to members
      * 
-     * @param  CreateMessageRequest $request [description]
-     * @param  Mnotify              $sms     [description]
-     * @return [type]                        [description]
+     * @param  CreateMessageRequest $request App\Http\Requests\Message\CreateMessageRequest
+     * @return void  
      */
-    public function send(CreateMessageRequest $request, Mnotify $sms)
+    public function send(CreateMessageRequest $request)
     {
         $data = $request->validated();
         AnnounceJob::dispatch($data['message'], $data['ids']);
-        //return $this->message->send($data['message'], $data['ids'], $sms);
     }
 
 }
