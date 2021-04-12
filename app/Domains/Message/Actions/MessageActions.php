@@ -29,9 +29,9 @@ class MessageActions
      * @param  Mnotify $sms App\Domains\Communication\Sms\Providers\Mnotify
      * @return array
      */
-    public function send(string $message, Mnotify $sms):array
+    public function send(string $message, array $ids=[], Mnotify $sms):array
     {
-        return $sms->send($this->data($message));
+        return $sms->send($this->data($message, $ids));
     }
 
     /**
@@ -101,14 +101,14 @@ class MessageActions
      * @param  string $message
      * @return array
      */
-    protected function data(string $message, $members=null): array
+    protected function data(string $message, array $ids): array
     {   
-        if(!$members){
+        if($ids){
             $members = DB::table('members')
             ->whereIn('id', $ids)->get();
         }
-        
-        if($members){
+
+        if(!$ids){
              $members = Member::select('mobile')->get();
         }
 

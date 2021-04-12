@@ -24,7 +24,8 @@ class CreateMessageRequest extends FormRequest
     public function rules()
     {
         return [
-            'message' => 'required|string'
+            'message' => 'required|string',
+            'ids' => 'sometimes|array'
         ];
     }
 }

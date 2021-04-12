@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Message;
 
+use App\Domains\Communication\Sms\Providers\Mnotify;
 use App\Domains\Message\Actions\MessageActions;
 use App\Domains\Message\Message;
 use App\Http\Controllers\Controller;
@@ -27,7 +28,8 @@ class MessageController extends Controller
      */
     public function messages()
     {
-        return $this->message->all();
+        // return $this->message->all();
+        return $this->message->send('hello',);
     }
 
     /**
@@ -90,7 +92,17 @@ class MessageController extends Controller
     }
 
 
-
-    public function send()
+    /**
+     * Send messages/announcements to members
+     * 
+     * @param  CreateMessageRequest $request [description]
+     * @param  Mnotify              $sms     [description]
+     * @return [type]                        [description]
+     */
+    public function send(CreateMessageRequest $request, Mnotify $sms)
+    {
+        $data = $request->validated();
+        return $this->message->send($data['message'], $data['ids'], $sms);
+    }
 
 }
