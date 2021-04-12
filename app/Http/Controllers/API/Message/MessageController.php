@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Message;
 
 use App\Domains\Communication\Sms\Providers\Mnotify;
 use App\Domains\Message\Actions\MessageActions;
+use App\Domains\Message\Jobs\AnnounceJob;
 use App\Domains\Message\Message;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Message\CreateMessageRequest;
@@ -102,7 +103,8 @@ class MessageController extends Controller
     public function send(CreateMessageRequest $request, Mnotify $sms)
     {
         $data = $request->validated();
-        return $this->message->send($data['message'], $data['ids'], $sms);
+        AnnounceJob::dispatch($data['message'], $data['ids']);
+        //return $this->message->send($data['message'], $data['ids'], $sms);
     }
 
 }

@@ -2,28 +2,29 @@
 
 namespace App\Domains\Message\Jobs;
 
+
 use App\Domains\Communication\Sms\Providers\Mnotify;
+use App\Domains\Member\Member;
+use App\Domains\Member\Traits\RetrieveMembers;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
+
 
 class AnnounceJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, RetrieveMembers;
 
-    public $members;
-    public $announcement;
+    
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($members, $announcement)
-    {
-        $this->members = $members;
-    }
+    public function __construct(public string $message, public array $ids = []){}
 
     /**
      * Execute the job.
@@ -32,7 +33,7 @@ class AnnounceJob implements ShouldQueue
      */
     public function handle(Mnotify $sms)
     {
-        return $sms->send($this->retrieveMembers($this->members));
+        return $sms->send($this->data());
     }
 
 
@@ -41,14 +42,14 @@ class AnnounceJob implements ShouldQueue
      *
      * @return [type] [description]
      */
-    public function retrieveMembers()
+    public function data()
     {
 
         return [
-            
-            'recipient' => $this->getNumbers($this->members),
+
+            'recipient' => $this->loadNum($this->ids),
             'sender' => 'kissiFamily',
-            'message' => $this->annoucement
+            'message' => $this->message
         ];
     }
 }
