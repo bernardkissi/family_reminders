@@ -49,7 +49,6 @@ class Payment extends Model
 
     public function contribution()
     {
-
         return $this->belongsTo(Contribution::class);
     }
 }

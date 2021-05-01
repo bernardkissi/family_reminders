@@ -4,6 +4,7 @@ namespace App\Domains\Member;
 
 use App\Domains\Contribution\Contribution;
 use App\Domains\Reminder\Reminder;
+use Database\Factories\MemberFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -43,8 +44,8 @@ class Member extends Model
     
     /**
      *  Contributions relationship
-     * 
-     * @return hasMany 
+     *
+     * @return hasMany
      */
     public function contributions()
     {
@@ -54,11 +55,22 @@ class Member extends Model
 
     /**
      * Reminders relationship
-     * 
+     *
      * @return hasMany
      */
     public function reminders()
     {
         return $this->hasMany(Reminder::class);
+    }
+
+
+    /**
+     * Create a new factory instance for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    protected static function newFactory()
+    {
+        return MemberFactory::new();
     }
 }

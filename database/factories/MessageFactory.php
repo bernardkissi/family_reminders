@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Message;
+use App\Domains\Message\Message;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MessageFactory extends Factory

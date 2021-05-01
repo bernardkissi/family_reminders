@@ -6,6 +6,7 @@ namespace App\Domains\Contribution\Actions;
 
 use App\Domains\Contribution\Contribution;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +18,7 @@ class ContributionActions
      * @param  array  $contribution
      * @return void
      */
-    public function create(array $contribution): void
+    public function create(Request $contribution): void
     {
         Contribution::create([
 
@@ -33,12 +34,15 @@ class ContributionActions
     /**
      *  Returns all contributions
      *
-     * @return array
+     * @return Illuminate\Support\Collection
      */
-    public function all(): array
+    public function contributions(): Collection
     {
-         return DB::table('contributions')
-         ->select('id', 'title', 'description', 'starts', 'expires_on')
+         $filter = 'notExpired';
+
+         return Contribution::query()
+         ->select('id', 'title', 'description', 'starts', 'expires_on', 'expired_at', 'starts')
+         ->{$filter}()
          ->get();
     }
 
@@ -51,7 +55,7 @@ class ContributionActions
      */
     public function contribution(Contribution $contribute): Contribution
     {
-         return Contribution::select('id', 'title', 'description', 'starts', 'banner', 'min', 'expires_on', 'min', 'expires_at')
+         return Contribution::select('id', 'title', 'description', 'starts', 'banner', 'min', 'expires_on', 'min', 'expired_at')
             ->where('id', $contribute->id)->first();
     }
 
@@ -80,9 +84,13 @@ class ContributionActions
         $contribute->update([
             
             'title' => $data->title,
+            'description' => $data->description,
+            'banner' => $data->banner,
             'min' => $data->min,
-            'expires' => $data->expires_on,
-            'expires_at' => $data->expires_at
+            'starts' => $data->starts,
+            'expires_on' => $data->expires_on,
         ]);
+
+        return $contribute;
     }
 }

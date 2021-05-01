@@ -24,13 +24,13 @@ class MessageController extends Controller
     /**
      *  Returns all messages
      *
-     * 
+     *
      * @return Collection Illuminate\Support\Collection
      */
     public function messages()
     {
-        // return $this->message->all();
-        return $this->message->send('hello',);
+        return $this->message->all();
+        // return $this->message->send('hello');
     }
 
     /**
@@ -47,7 +47,7 @@ class MessageController extends Controller
 
     /**
      *  Updates a message
-     * 
+     *
      * @param  Message  $message App\Domains\Message\Message
      * @param  CreateMessageRequest $request App\Http\Requests\Message\CreateMessageRequest;
      * @return void
@@ -61,8 +61,8 @@ class MessageController extends Controller
     /**
      * Set Message to be default
      *
-     * @param  Message $message App\Domains\Message\Message 
-     * @return void     
+     * @param  Message $message App\Domains\Message\Message
+     * @return void
      */
     public function default(Message $message)
     {
@@ -70,9 +70,9 @@ class MessageController extends Controller
     }
 
     /**
-     * Delete a Message 
-     * 
-     * @param  Message $message App\Domains\Message\Message 
+     * Delete a Message
+     *
+     * @param  Message $message App\Domains\Message\Message
      * @return void
      */
     public function delete(Message $message)
@@ -83,7 +83,7 @@ class MessageController extends Controller
 
     /**
      * Delete a selected Messages
-     * 
+     *
      * @param  Request request Illuminate\Http\Request
      * @return void
      */
@@ -95,14 +95,13 @@ class MessageController extends Controller
 
     /**
      * Send messages/announcements to members
-     * 
+     *
      * @param  CreateMessageRequest $request App\Http\Requests\Message\CreateMessageRequest
-     * @return void  
+     * @return void
      */
     public function send(CreateMessageRequest $request)
     {
         $data = $request->validated();
         AnnounceJob::dispatch($data['message'], $data['ids']);
     }
-
 }

@@ -14,9 +14,9 @@ class Flutterwave
      * @param  array  $user
      * @param  string $amount
      * @param  int    $code
-     * @return array
+     * @return string
      */
-    public function charge(array $user, string $amount, int $code): array
+    public function charge(array $user, string $amount, int $code): string
     {
         
         $payload = $this->payload($user, $amount, $code);
@@ -28,7 +28,7 @@ class Flutterwave
             return response()->json(['message' => 'Your payment has failed']);
         }
 
-        return $response;
+        return filter_var($response->json()['data']['link'], FILTER_SANITIZE_URL);
     }
 
 
@@ -50,9 +50,9 @@ class Flutterwave
             'payment_options' => 'mobilemoney,ussd,card',
             'redirect_url' => route('home'),
             'customer' => [
-                'name' => $user->name ,
-                'email' => $user->email ,
-                'mobile' => $user->mobile
+                'name' => $user['name'],
+                'email' => $user['email'],
+                'mobile' => $user['mobile']
             ],
             'subaccounts'=> [
                 

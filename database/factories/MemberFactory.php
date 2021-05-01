@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Member;
+use App\Domains\Member\Member;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class MemberFactory extends Factory

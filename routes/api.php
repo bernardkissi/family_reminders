@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\API\Contribution\ContributionController;
 use App\Http\Controllers\API\Members\MemberController;
 use App\Http\Controllers\API\Message\MessageController;
+use App\Http\Controllers\API\Payments\PaymentController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -36,14 +38,17 @@ Route::post('/messages', [ MessageController::class, 'create']);
 Route::post('/messages/send', [ MessageController::class, 'send']);
 Route::patch('/messages/{message}', [ MessageController::class, 'update']);
 Route::patch('/messages/default/{message}', [MessageController::class, 'default']);
-Route::delete('/messages/{message}',  [MessageController::class, 'delete']);
-Route::delete('/messages',  [MessageController::class, 'deleteSelected']);
+Route::delete('/messages/{message}', [MessageController::class, 'delete']);
+Route::delete('/messages', [MessageController::class, 'deleteSelected']);
 
 
+Route::get('/contributions', [ContributionController::class, 'contributions']);
+Route::post('/contribution', [ContributionController::class, 'create']);
+Route::get('/contribution/{contribute:slug}', [ContributionController::class, 'contribution']);
+Route::delete('/contribution/{contribute:slug}/delete', [ContributionController::class, 'delete']);
+Route::patch('/contribution/{contribute:slug}/edit', [ContributionController::class, 'update']);
 
-
-
-
+Route::post('/contribute/{contribution}', [PaymentController::class, 'contribute']);
 
 // Route::post('/contribution', 'ContributionController@create')->name('create.contribution');
 // Route::get('/contribution/{contribute:slug}', 'ContributionController@index')->name('index.contribution');

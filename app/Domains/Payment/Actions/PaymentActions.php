@@ -8,6 +8,7 @@ use App\Domains\Contribution\Contribution;
 use App\Domains\Payment\Jobs\ProcessPaymentsJob;
 use App\Domains\Payment\Payment;
 use App\Domains\Payment\Providers\Flutterwave;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 
 class PaymentActions
@@ -19,25 +20,25 @@ class PaymentActions
      * @param  array  $data
      * @return array
      */
-    public function pay(Flutterwave $gateway, array $data): array
+    public function pay(Contribution $contribution, Flutterwave $gateway, Request $request): string
     {
 
-        if ($data->amount < $data->min_value) {
+        if ($request->amount < $contribution->min_value) {
             return response()
             ->json(['message' => 'Please the amount you contribute is too low. At least above GHS'. $request->min_value], 400);
         }
-        $code = mt_rand(100000, 999999);
-        $contribute = Contribution::where('slug', $data->contribution)->first();
-        $contribute->payments()->create([
 
-            'amount' => $data->amount,
+        $code = mt_rand(100000, 999999);
+        $contribution->payments()->create([
+
+            'amount' => $request->amount,
             'tx_ref' => $code,
-            'name' => $data->user->name,
-            'email' => $data->user->email,
-            'mobile' => $data->user->name
+            'name' =>   $request->user['name'],
+            'email' =>  $request->user['email'],
+            'mobile' => $request->user['mobile']
         ]);
 
-        return $gateway->charge($data->user, $data->amount, $code);
+        return $gateway->charge($request->user, $request->amount, $code);
     }
 
 
@@ -61,7 +62,7 @@ class PaymentActions
     public function all(): Collection
     {
         return Payment::with(array('contribution' => function ($query) {
-                $query->select(['id', 'title']);
+            $query->select(['id', 'title']);
         }))
         ->orderBy('created_at', 'desc')
         ->groupBy('contribution_id')
